@@ -1,11 +1,12 @@
 //API Wrapper for Local USB Temp Sensor
+//Returns current fahrenheit temperature in decimal format
 
 var util = require('util');
 var exec = require('child_process').exec;
-var child;
+var child; //do i need this var?
 
 // unix command for sensor
-var unixCommand = '../usb-thermometer-master/pcsensor';
+var unixCommand = appRoot + '/../usb-thermometer-master/pcsensor';
 
 // constructor
 var tempSensor = function() {};

@@ -7,6 +7,14 @@ var nconf = require('nconf');
 var defaults = {
 	hapi:{
 		port: 3000
+	},
+	forcastIO:{
+		key: 'f8939532627c8f3127748bd8d371fe19'
+		//1000 requests per day
+	},
+	googleGEO:{
+		key: 'AIzaSyDSSjaku-pUuUwT3kbiKmL45J6SWwxaOEQ'
+		//2500 requests per day - 5 requests per second
 	}
 };
 
