@@ -35,7 +35,7 @@ sensor.prototype.getReading = function() {
 }
 
 //** Private Functions **//
-var _setType = function() {
+var _setAPIByType = function() {
 	//get reading type
 	switch(this.type) {
     case 'local': //usb sensor
