@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/jwtlake/thermal-sensor/issues"
   },
-  "homepage": "https://github.com/jwtlake/thermal-sensor#readme"
+  "homepage": "https://github.com/jwtlake/thermal-sensor#readme",
+  "dependencies": {
+    "nconf": "^0.8.2"
+  }
 }
