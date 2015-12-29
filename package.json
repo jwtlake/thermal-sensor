@@ -1,0 +1,23 @@
+{
+  "name": "thermal-sensor",
+  "version": "1.0.0",
+  "description": "Sensor App for reading and reporting home temperature.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jwtlake/thermal-sensor.git"
+  },
+  "keywords": [
+    "temperature",
+    "sensor"
+  ],
+  "author": "Jonathan Lake",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jwtlake/thermal-sensor/issues"
+  },
+  "homepage": "https://github.com/jwtlake/thermal-sensor#readme"
+}
