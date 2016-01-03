@@ -1,45 +1,43 @@
-//API Wrapper for Local USB Temp Sensor
-//Returns current fahrenheit temperature in decimal format
+// API Wrapper for Local USB Temp Sensor
+// Returns current fahrenheit temperature in decimal format
 
+//** Dependencies **//
 var util = require('util');
 var exec = require('child_process').exec;
 var child; //do i need this var?
 
-// unix command for sensor
+//** Settings **// **Hardcoded need to fix
 var unixCommand = appRoot + '/../usb-thermometer-master/pcsensor';
 
-// constructor
-var tempSensor = function() {};
+//** Object **//
+var UsbSensor = function(){};
 
-// read temp sesnor
-tempSensor.prototype.getReading = function(callback) {
-	
+//** Exports **//
+module.exports = UsbSensor;
+
+//** Prototyes **//
+UsbSensor.prototype.getReading = function(callback) {
 	//var reading;
 	child = exec(unixCommand, function (error, stdout, stderr) {
-		
-		var reading;
-		if (error !== null) {
-			reading = 'exec error: ' + error;
-		} else {
-			reading = stdout;
+		//check for unix errors
+		if (error) {
+			console.log('exec error: ' + error);
+			return;
 		}
-		
-		//format usb result
-		format(reading, function(reading_F) {
-			//return f temp value
-			return callback(reading_F); 
+		//format reading result
+		var reading = stdout;
+		_format(reading, function(reading) {
+			callback(reading);
 		});	
 	});
 };
 
-// format temp sensor output 
-var format = function(reading, callback) {
-	
+//** Private Functions **//
+function _format(reading, callback) {
+
 	//split into array
 	reading = reading.trim(); // remove character return
 	var array = reading.split(' '); // split by space characters
-
-	//console.log(array);
 		
 	//result vales
 	var date = array[0]; // 2015/07/26
@@ -52,9 +50,9 @@ var format = function(reading, callback) {
 	reading_F  = reading_F.substring(0, reading_F.length - 1);
 	reading_C  = reading_C.substring(0, reading_C.length - 1);
 	
+	//convert to number
+	reading_F = parseFloat(reading_F);
+
 	//return
 	callback(reading_F);
-}; 
-
-// export constructor
-module.exports = tempSensor;
+};

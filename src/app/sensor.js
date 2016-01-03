@@ -3,12 +3,12 @@ var forecastAPI = require(appRoot + '/src/app/api/forecast_API');
 var usbAPI = require(appRoot + '/src/app/api/usb_API');
 
 //** Object **//
-function sensor(type){
+var Sensor = function(type, location){
 	//sensor info
 	this.name = '';
-	this.location = '';
+	this.location = location;
 	this.type = type;
-	this.sensorAPI = _setAPIByType(); //set api function
+	this.sensorAPI = _setSensorTypeAPI.call(this);
 
 	//server info
 	this.id = '';
@@ -19,36 +19,33 @@ function sensor(type){
 	this.frequency = '';
 
 	//store
-	this.readings = [];	
+	this.readings = [];
 }
 
 //** Exports **//
-module.exports = sensor;
+module.exports = Sensor;
 
 //** Prototyes **// 
-sensor.prototype.getReading = function() {
-	
-	
-
+Sensor.prototype.getReading = function() {
 	var thisObject = this;
-	console.log(readingAPI.getReading);
+	this.sensorAPI.getReading(function(reading) {
+		thisObject.readings.push({
+			timestamp: new Date(),
+			reading: reading
+		});
+	});
 }
 
 //** Private Functions **//
-var _setAPIByType = function() {
-	//get reading type
+function _setSensorTypeAPI() {
 	switch(this.type) {
-    case 'local': //usb sensor
-        localSensorFunction = new usbAPI();
-        return localSensorFunction;
-        
-        break;
-    case 'external': //web service
-        externalSensorFunction = new forecastAPI();
-        return externalSensorFunction;
-        break;
-    default:
-        //do nothing
+		case 'local': //usb sensor
+			return new usbAPI();
+			break;
+	    case 'external': //web service
+	    	return new forecastAPI(this.location);
+			break;
+	    default:
+			//do nothing
 	}
-}
-
+};

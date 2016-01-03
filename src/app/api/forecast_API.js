@@ -1,14 +1,15 @@
 // API Wrapper for External Temp service Forcast.io
-//Returns current fahrenheit temperature in decimal format
+// Returns current fahrenheit temperature in decimal format
 
 //** Settings **//
 var settings = require(appRoot + '/src/app/config/settings');
 
-//** Libaries **//
-var geocoder = require('node-geocoder')('google', 'https', {apiKey: settings.get('googleGEO:key'), formatter: null});
-var forecast = require('forecast')({
+//** Dependencies **//
+var geocoder = require('node-geocoder')('google', 'https', {apiKey: settings.get('apiKeys:googleGEO:key'), formatter: null});
+var forecastLib = require('forecast')
+var forecast = new forecastLib({
 	service: 'forecast.io',
-	key: settings.get('forcastIO:key'),
+	key: settings.get('apiKeys:forcastIO:key'),
 	units: 'f', // fahrenheit
 	cache: true, // Cache API request
 	ttl: { // How long to cache requests. Uses syntax from moment.js: http://momentjs.com/docs/#/durations/creating/
@@ -18,53 +19,63 @@ var forecast = require('forecast')({
 });
 
 //** Object **//
-var forecastService = function() {
-	this.address = null;
+var ForecastService = function(address) {
+	this.address = address;
 	this.latitude = null;
 	this.longitude = null;
 };
 
 //** Exports **//
-module.exports = forecastService;
+module.exports = ForecastService;
 
 //** Prototyes **// 
-forecastService.prototype.getReading = function() {
-	if(this.latitude == null || this.longitude == null) {
-		return _geoRequest() //get lat lng from address
-		.then(function() {
-			_forcastRequest(); //get forcast for lat lng (return only current temp)
+ForecastService.prototype.getReading = function(callback) {
+	var thisObject = this;
+	// console.log(thisObject.address + ': [(' + thisObject.latitude +')('+ thisObject.longitude + ')]');
+	if(thisObject.latitude == null || thisObject.longitude == null) {
+		_geoRequest.call(thisObject, function() { //get lat lng from address
+			_forcastRequest.call(thisObject, function(reading) {
+				callback(reading);
+			}); //get forcast for lat lng (return only current temp)
 		});
 	} else {
-		return _forcastRequest(); //get forcast for lat lng (return only current temp)
-	}		
+		_forcastRequest.call(thisObject, function(reading) {
+			callback(reading);
+		}); //get forcast for lat lng (return only current temp)
+	}
 };
 
 //** Private Functions **//
-var _geoRequest = function() {
+var _geoRequest = function(callback) {
 	var thisObject = this;
-	var lookUpAdress = this.address;
 	//get lat and lng from address
-	geocoder.geocode(lookUpAdress, function(err, res) {
-		//get first result (API allows for multiple requests)
-		thisObject.latitude = res[0].latitude;
-		thisObject.longitude = res[0].longitude;
+	if(thisObject.address == null){ console.log('_geoRequest function missing address'); return;}
+	geocoder.geocode(thisObject.address, function(err, res) {
+		if(!err) { 
+			//get first result (API allows for multiple requests)
+			thisObject.latitude = res[0].latitude;
+			thisObject.longitude = res[0].longitude;
+			callback(); 
+		} 
+		else { console.log('error: ' + err); return; }
 	});
 }
 
-var _forcastRequest = function() {
-	if(this.latitude == null || this.longitude == null) {
-		console.log('Error making forcast request: Missing lat and lng.')
-		return null;
+var _forcastRequest = function(callback) {
+	var thisObject = this;
+	if(thisObject.latitude == null || thisObject.longitude == null) {
+		console.log('Error making forcast request: Missing lat and lng.');
+		return;
 	}
-	
+
 	//get forcast for lat and lng
-	forecast.get([this.latitude, this.longitude], true, function(err, weather) {
+	forecast.get([thisObject.latitude, thisObject.longitude], true, function(err, weather) {
 		if(err) { 
 			console.log(err);
-			return null;
 		} else { 
 			var currentTemp = weather.currently.temperature;
-			return currentTemp; 
+			// console.log(currentTemp);
+			callback(currentTemp);
 		}
 	});
 }
