@@ -48,3 +48,7 @@ Temporary Items
 
 # Dependency directory
 node_modules
+
+# Private settings files
+src/app/config/apiKeys.json
+src/app/config/sensors.json
