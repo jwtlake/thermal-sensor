@@ -56,21 +56,14 @@ SensorArray.prototype.report = function() {
 			if(sensor.readings.length > 0)
 			{
 				//start sending results to the server one reading at a time
-				//console.log('sensor: '+sensor.name+ 'sensor count: ' + sensor.readings.length);
 				post(sensor.readings);
 
 				function post(readings) {
-					//var thisObject = this;
-
-					// console.log('first check: '+readings);
-					console.log('before count: '+ readings.length);
-					var nextReading = readings.shift();//_.drop(readings);
-					// console.log('after count: '+ readings.length);
+					//get next reading
+					var nextReading = readings.shift();
 					
-					//console.log('nextReading: ' + nextReading.toString());
-
+					//post to server
 					var url = 'http://' + sensor.server + '/api/sensors/' + sensor.id + '/readings';
-					//console.log(url);
 					request.post({
 						url: url,
 						timeout: 4000,
@@ -81,54 +74,18 @@ SensorArray.prototype.report = function() {
 						}
 					}, function(err, httpResponse, body) {
 						if(err){
-							console.log('Error posting to server: ' + err);
+							console.log('**Error posting to server: ' + err);
 							readings.push(nextReading) // back to reading store queue
 						}
 						else{
-							//console.log(httpResponse);
-							//console.log(body);
-							console.log('Success!');
+							console.log('**Submited reading to server --  Name: '+sensor.name + ' Id: '+ sensor.id + ' Reading: ' +nextReading.reading + ' TimeStamp: ' +nextReading.timestamp);
 							if(typeof readings != 'undefined' && readings.length > 0){
-								console.log('new length: ' + readings.length + ' retry in 5 seconds');
-								// console.log('retry in 5 seconds');
 								setTimeout(post(readings), 5000); //wait 5 second and try to send the next reading
 							}
 						}
 					});
 				}
-				// sensor.readings = _.dropWhile(sensor.readings, function(reading) {
-				// 	return _sendReadingToServer(sensor.server, sensor.id, sensor.key, reading); //returns true or false
-				// });
 			}
-		}
-	});
-}
-
-//** Private Functions **//
-var _sendReadingToServer = function(server, id, key, reading) {
-	console.log('sending');
-	return true;
-	return false;
-
-	console.log('Sending new reading...');
-
-	// send reading to server via post
-	request.post({
-			url: 'http://' + server + '/api/sensors/' + id + '/readings', 
-			form: {
-				key: key,    
-				temperature: reading.reading,
-				timestamp: reading.timestamp
-			}
-	}, function(err, httpResponse, body) {		
-		if(err){
-			console.log(err);
-			readings.push(reading) // back to reading store queue
-		}
-		else{
-			//console.log(httpResponse);
-			//console.log(body);
-			console.log('Success!');
 		}
 	});
 }
