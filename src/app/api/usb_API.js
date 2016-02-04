@@ -7,7 +7,7 @@ var exec = require('child_process').exec;
 var child; //do i need this var?
 
 //** Settings **// **Hardcoded need to fix
-var unixCommand = appRoot + '/../usb-thermometer-master/pcsensor';
+var unixCommand = appRoot + '/../usb-thermometer/pcsensor';
 
 //** Object **//
 var UsbSensor = function(){};
