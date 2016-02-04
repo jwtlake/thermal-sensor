@@ -6,7 +6,7 @@ Sensor App for reading and reporting home temperature with the Temper1F USB sens
 ## Usage
 - Get your [thermal-server](https://github.com/jwtlake/thermal-server) setup.
 
-- Follow [Lee's](http://lee.smallbone.com/2014/10/using-temper1f-usb-temperature-probe-on-raspberry-pi/) great walkthrough on getting the Temper1F working on your raspberryPi. 
+- Download and install [Peter's TEMPer Project](https://github.com/petechap/usb-thermometer) to get your usb sensor working
 
 - Download the thermal-sensor project
 ```
