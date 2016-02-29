@@ -8,8 +8,3 @@ SensorArray.load(settings.get('sensors'));
 
 // start scanning
 SensorArray.startScan();
-
-// report
-setInterval(function() {
-    SensorArray.report();
-}, 60000); //every 1 min
