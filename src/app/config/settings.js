@@ -26,7 +26,8 @@ var defaults = {
 			"enabled": false,
 			"frequency": 1,
 			"server": "192.168.0.105:3000",
-			"key": "72f18b5f6f63b572e58c48d19c957b52"
+			"key": "72f18b5f6f63b572e58c48d19c957b52",
+			"offset": 0
 		},
 		{
 			"name": "Lake Oswego",
@@ -35,7 +36,8 @@ var defaults = {
 			"enabled": false,
 			"frequency": 5,
 			"server": "192.168.0.105:3000",
-			"key": "72f18b5f6f63b572e58c48d19c957b53"
+			"key": "72f18b5f6f63b572e58c48d19c957b53",
+			"offset": 0
 		}
 	]
 };
