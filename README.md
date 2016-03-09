@@ -20,7 +20,8 @@ $ node index.js
 ```
 
 ## To Do
-Clean up README.md (better setup documentation)
-Tests!! (Could have saved myself many hours if I would have started with some. haha...)
-UI for inicial configuration
-Fully implement sensor key functionality (client should make a request for a server api key.)
+- Clean up README.md (better setup documentation)
+- Tests!! (Could have saved myself many hours if I would have started with some. haha...)
+- UI for inicial configuration
+- Fully implement sensor key functionality (client should make a request for a server api key.)
+- Lots more im sure...
